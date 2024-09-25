@@ -40,10 +40,12 @@ dependencies = [
 ]
 
 [tool.uv.workspace]
-members = ["packages/*"]
+members = ["packages/*", "other_packages/*"]
 
 [tool.uv.sources]
 nomad-lab = { workspace = true }
+nomad-parser-plugins-electronic = { workspace = true }
+nomad-parser-plugins-vasp = { workspace = true }
 
 [tool.uv]
 extra-index-url = [

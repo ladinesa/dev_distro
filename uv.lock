@@ -11,6 +11,8 @@ resolution-markers = [
 members = [
     "nomad-distribution",
     "nomad-lab",
+    "nomad-parser-plugins-electronic",
+    "nomad-parser-vasp",
 ]
 constraints = [{ name = "hyperspy", specifier = ">=1.7.6" }]
 
@@ -2163,6 +2165,18 @@ wheels = [
 ]
 
 [[package]]
+name = "jsonpath-ng"
+version = "1.6.1"
+source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
+dependencies = [
+    { name = "ply" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2a/58/a31c70d23cbab69129e72be2d70c7d525ee1bd7825e6312e7c09517a01a0/jsonpath-ng-1.6.1.tar.gz", hash = "sha256:086c37ba4917304850bd837aeab806670224d3f038fe2833ff593a672ef0a5fa", size = 36024 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/16/0a/3b1ee3721b4bd684b0e29c724ab82ed3b2c0e42285beb8bf9e18de8c903f/jsonpath_ng-1.6.1-py3-none-any.whl", hash = "sha256:8f22cd8273d7772eea9aaa84d922e0841aa36fdb8a2c6b7f6c3791a16a9bc0be", size = 29502 },
+]
+
+[[package]]
 name = "jsonpointer"
 version = "3.0.0"
 source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
@@ -3722,7 +3736,7 @@ requires-dist = [
     { name = "nomad-normalizer-plugin-system", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-atomistic", specifier = ">=1.0" },
     { name = "nomad-parser-plugins-database", specifier = ">=1.0" },
-    { name = "nomad-parser-plugins-electronic", specifier = ">=1.0" },
+    { name = "nomad-parser-plugins-electronic", editable = "packages/nomad-parser-plugins-electronic" },
     { name = "nomad-parser-plugins-workflow", specifier = ">=1.0" },
     { name = "nomad-porous-materials", git = "https://github.com/FAIRmat-NFDI/nomad-porous-materials.git?rev=522f4a3208077f534f1c5e886527ee2104283d0b#522f4a3208077f534f1c5e886527ee2104283d0b" },
     { name = "nomad-schema-plugin-run", specifier = ">=1.0.1" },
@@ -3749,7 +3763,7 @@ wheels = [
 
 [[package]]
 name = "nomad-lab"
-version = "1.3.7"
+version = "1.3.7.dev71+gdf6bc1301.d20240925"
 source = { editable = "packages/nomad-FAIR" }
 dependencies = [
     { name = "aniso8601" },
@@ -3764,6 +3778,7 @@ dependencies = [
     { name = "httpx" },
     { name = "importlib-metadata" },
     { name = "jmespath" },
+    { name = "jsonpath-ng" },
     { name = "kaleido" },
     { name = "lxml" },
     { name = "lxml-html-clean" },
@@ -3905,6 +3920,7 @@ requires-dist = [
     { name = "inflection", marker = "extra == 'infrastructure'", specifier = "==0.5.1" },
     { name = "itsdangerous", marker = "extra == 'infrastructure'", specifier = ">=2.1.2" },
     { name = "jmespath", specifier = ">=0.10.0" },
+    { name = "jsonpath-ng" },
     { name = "jsonschema", extras = ["format"], marker = "extra == 'infrastructure'", specifier = "==4.17.3" },
     { name = "jupyterhub", marker = "extra == 'infrastructure'", specifier = "==4.0.2" },
     { name = "kaleido", specifier = "==0.2.1" },
@@ -4111,7 +4127,7 @@ wheels = [
 [[package]]
 name = "nomad-parser-plugins-electronic"
 version = "1.0"
-source = { registry = "https://gitlab.mpcdf.mpg.de/api/v4/projects/2187/packages/pypi/simple" }
+source = { editable = "packages/nomad-parser-plugins-electronic" }
 dependencies = [
     { name = "h5py" },
     { name = "lxml" },
@@ -4123,9 +4139,56 @@ dependencies = [
     { name = "pydantic" },
     { name = "pyyaml" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a2/11/36d2cd191ba05d54ee6ed1323c6f15fe950dba8b3f2cb8cbc343a9264409/nomad_parser_plugins_electronic-1.0.tar.gz", hash = "sha256:8273593e3b2da5d218c064f42fd1b3322c72888f00bdeb0ea4dd0d2539c469e8", size = 876415 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/fe/6c/f52fa20394fe889c0245a3b9ecbf3e1e36bf0218985570df55ccb947b6b2/nomad_parser_plugins_electronic-1.0-py3-none-any.whl", hash = "sha256:cb5b9681cf821b665482309cfac45339ddf2230091bd379ac642f861713ca182", size = 958698 },
+
+[package.optional-dependencies]
+dev = [
+    { name = "astroid" },
+    { name = "mypy" },
+    { name = "pytest" },
+    { name = "pytest-cov" },
+    { name = "pytest-timeout" },
+    { name = "ruff" },
+    { name = "typing-extensions" },
+]
+infrastructure = [
+    { name = "elasticsearch" },
+    { name = "elasticsearch-dsl" },
+    { name = "fastapi" },
+    { name = "mongoengine" },
+    { name = "pydantic" },
+    { name = "pyjwt", extra = ["crypto"] },
+    { name = "python-logstash" },
+    { name = "structlog" },
+    { name = "zipstream-new" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "astroid", marker = "extra == 'dev'", specifier = ">=2.5.1" },
+    { name = "elasticsearch", marker = "extra == 'infrastructure'", specifier = "==7.17.1" },
+    { name = "elasticsearch-dsl", marker = "extra == 'infrastructure'", specifier = "==7.4.0" },
+    { name = "fastapi", marker = "extra == 'infrastructure'", specifier = "<0.100" },
+    { name = "h5py", specifier = ">=3.6.0" },
+    { name = "lxml", specifier = ">=5.2" },
+    { name = "mongoengine", marker = "extra == 'infrastructure'", specifier = ">=0.20" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = "==1.0.1" },
+    { name = "netcdf4", specifier = "==1.6.5" },
+    { name = "nomad-lab", editable = "packages/nomad-FAIR" },
+    { name = "nomad-parser-plugins-simulation", specifier = ">=1.0.2" },
+    { name = "nomad-schema-plugin-run", specifier = ">=1.0.1" },
+    { name = "nomad-schema-plugin-simulation-workflow", specifier = ">=1.0.1" },
+    { name = "pydantic", specifier = ">=1.10.8,<2.0.0" },
+    { name = "pydantic", marker = "extra == 'infrastructure'", specifier = ">=1.10.8,<2.0.0" },
+    { name = "pyjwt", extras = ["crypto"], marker = "extra == 'infrastructure'", specifier = "==2.6.0" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = ">=3.10.0" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = ">=2.7.1" },
+    { name = "pytest-timeout", marker = "extra == 'dev'", specifier = ">=1.4.2" },
+    { name = "python-logstash", marker = "extra == 'infrastructure'", specifier = "==0.4.6" },
+    { name = "pyyaml", specifier = ">=6.0" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.1.8" },
+    { name = "structlog", marker = "extra == 'infrastructure'" },
+    { name = "typing-extensions", marker = "extra == 'dev'", specifier = ">=4.4.0" },
+    { name = "zipstream-new", marker = "extra == 'infrastructure'", specifier = "==1.1.5" },
 ]
 
 [[package]]
@@ -4159,6 +4222,29 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/fe/14/66e9027d404f07c106d8698e4a8e1e0cf4504a13bd948f7a01c999368122/nomad_parser_plugins_workflow-1.0.tar.gz", hash = "sha256:1485d0a8d14a293cd22f873d7486ca528eddf20fc6964f4b99b12e73fc2167b3", size = 80543 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/31/59/016925d317e2dda3092b5a353db018c8cbdf38315256a56f7545ffb21fe9/nomad_parser_plugins_workflow-1.0-py3-none-any.whl", hash = "sha256:221915010af3d3f25e6bcd009101da1430eb9955ef4fc6b88114f3b7a482e01a", size = 107615 },
+]
+
+[[package]]
+name = "nomad-parser-vasp"
+version = "0.1.0"
+source = { editable = "other_packages/nomad-parser-vasp" }
+dependencies = [
+    { name = "nomad-lab" },
+]
+
+[package.optional-dependencies]
+dev = [
+    { name = "pytest" },
+    { name = "ruff" },
+    { name = "structlog" },
+]
+
+[package.metadata]
+requires-dist = [
+    { name = "nomad-lab", editable = "packages/nomad-FAIR" },
+    { name = "pytest", marker = "extra == 'dev'" },
+    { name = "ruff", marker = "extra == 'dev'" },
+    { name = "structlog", marker = "extra == 'dev'" },
 ]
 
 [[package]]
